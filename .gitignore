@@ -1,0 +1,13 @@
+
+# Keep raw datasets out of public GitHub
+data/*.csv
+data/*.xlsx
+data/*.xls
+
+# Python generated files
+__pycache__/
+*.py[cod]
+.venv/
+
+# Secrets and local configuration
+.env

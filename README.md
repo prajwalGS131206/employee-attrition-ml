@@ -45,3 +45,37 @@ Setup and execution instructions will be added after the implementation is teste
 ## Author
 Prajwal
 
+## Model Performance
+
+The project compares Logistic Regression and Random Forest models to predict employee attrition.
+
+### Evaluation Results
+
+The Logistic Regression model was evaluated using a classification threshold of 0.4.
+
+| Metric | Score |
+|---|---:|
+| Accuracy | 86.73% |
+| Precision | 61.76% |
+| Recall | 44.68% |
+| F1-score | 51.85% |
+| ROC-AUC | 81.14% |
+
+### Key Findings
+
+- Logistic Regression achieved a ROC-AUC of approximately 0.81.
+- Lowering the classification threshold from 0.5 to 0.4 improved recall and F1-score on the held-out test set.
+- Attrition prediction remains challenging because the dataset contains fewer employees who leave than employees who stay.
+- Recall remains a limitation, so further model improvements are needed.
+
+### Limitations
+
+This project uses a public educational dataset. Its predictions are not validated for real-world HR decisions and should not be used to make employment decisions.
+
+### Project Outputs
+
+- Exploratory data analysis charts
+- Baseline model comparison
+- Classification threshold experiment
+- Model evaluation metrics saved as CSV
+- Saved machine learning pipeline
