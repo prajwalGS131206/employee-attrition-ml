@@ -98,23 +98,29 @@ Prajwal
 
 The project compares Logistic Regression and Random Forest models to predict employee attrition.
 
-### Evaluation Results
+### Final Holdout Evaluation
 
-The Logistic Regression model was evaluated using a classification threshold of 0.4.
+The Logistic Regression model was evaluated using a threshold selected on validation data. A fresh holdout split was used for this evaluation.
+
 | Metric | Score |
 |---|---:|
 | Accuracy | 85.37% |
-| Precision | 55.26% |
-| Recall | 44.68% |
-| F1-score | 49.41% |
-| ROC-AUC | 79.94% |
+| Precision | 56.67% |
+| Recall | 36.17% |
+| F1-score | 44.16% |
+| ROC-AUC | 82.00% |
 
 ### Key Findings
 
-- Logistic Regression achieved a ROC-AUC of approximately 0.81.
--A threshold of 0.4 was selected using validation data to balance precision and recall.
-- Attrition prediction remains challenging because the dataset contains fewer employees who leave than employees who stay.
-- Recall remains a limitation, so further model improvements are needed.
+- Logistic Regression achieved a holdout ROC-AUC of 0.82.
+- The validation process selected a classification threshold of 0.5 based on F1-score.
+- The model identified 17 of 47 employees who left in the holdout set.
+- Recall remains a limitation, so further improvements are needed.
+
+### Evaluation Limitation
+
+The holdout uses a new split of the same public dataset, which has been explored during earlier experiments. These results are a fresh-split evaluation, not independent external validation. The model is for educational purposes and should not be used to make employment decisions.
+
 
 ### Limitations
 
