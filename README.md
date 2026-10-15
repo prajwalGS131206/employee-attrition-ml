@@ -29,7 +29,12 @@ Source: https://www.kaggle.com/datasets/pavansubhasht/ibm-hr-analytics-attrition
 The dataset will be used for educational and portfolio purposes. Dataset attribution and applicable terms will be documented.
 
 ## Project Status
-In progress — data exploration, model development, evaluation, and dashboard creation are planned.
+- [x] Dataset exploration and EDA
+- [x] Logistic Regression and Random Forest comparison
+- [x] Validation-based threshold selection
+- [x] Model evaluation and prediction script
+- [ ] Power BI dashboard
+- [ ] Final documentation and project review
 
 ## Planned Project Structure
 - `data/` — dataset instructions
@@ -40,7 +45,51 @@ In progress — data exploration, model development, evaluation, and dashboard c
 - `app.py` — interactive demo, if implemented
 
 ## How to Run
-Setup and execution instructions will be added after the implementation is tested.
+## How to Run
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/prajwalGS131206/employee-attrition-ml.git
+cd employee-attrition-ml
+```
+
+### 2. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Add the dataset
+
+Place the IBM HR Analytics Attrition CSV file inside the `data/` directory. The dataset is excluded from GitHub, so obtain it separately from the dataset source listed above.
+
+### 4. Run exploratory data analysis
+
+```bash
+python inspect_data.py
+python eda_analysis.py
+```
+
+### 5. Train the baseline model
+
+```bash
+python train_model.py
+```
+
+### 6. Evaluate the model and select a threshold
+
+```bash
+python evaluate_thresholds.py
+```
+
+### 7. Generate a prediction
+
+```bash
+python predict_attrition.py
+```
+
+Enter an employee row number when prompted.
 
 ## Author
 Prajwal
@@ -52,19 +101,18 @@ The project compares Logistic Regression and Random Forest models to predict emp
 ### Evaluation Results
 
 The Logistic Regression model was evaluated using a classification threshold of 0.4.
-
 | Metric | Score |
 |---|---:|
-| Accuracy | 86.73% |
-| Precision | 61.76% |
+| Accuracy | 85.37% |
+| Precision | 55.26% |
 | Recall | 44.68% |
-| F1-score | 51.85% |
-| ROC-AUC | 81.14% |
+| F1-score | 49.41% |
+| ROC-AUC | 79.94% |
 
 ### Key Findings
 
 - Logistic Regression achieved a ROC-AUC of approximately 0.81.
-- Lowering the classification threshold from 0.5 to 0.4 improved recall and F1-score on the held-out test set.
+-A threshold of 0.4 was selected using validation data to balance precision and recall.
 - Attrition prediction remains challenging because the dataset contains fewer employees who leave than employees who stay.
 - Recall remains a limitation, so further model improvements are needed.
 
@@ -74,8 +122,33 @@ This project uses a public educational dataset. Its predictions are not validate
 
 ### Project Outputs
 
-- Exploratory data analysis charts
-- Baseline model comparison
-- Classification threshold experiment
-- Model evaluation metrics saved as CSV
-- Saved machine learning pipeline
+### Project Outputs
+
+- Exploratory Data Analysis (EDA) charts showing attrition distribution and income patterns.
+- Baseline model comparison using Logistic Regression and Random Forest.
+- Validation-based classification threshold selection to balance precision and recall.
+- Model evaluation report containing Accuracy, Precision, Recall, F1-score, and ROC-AUC.
+- Confusion matrix to examine correct predictions and missed attrition cases.
+- Saved scikit-learn preprocessing and Logistic Regression pipeline.
+- Employee-level attrition prediction script using the saved model and selected threshold.
+
+### Current Model Performance
+
+| Metric | Result |
+|---|---:|
+| Accuracy | 85.4% |
+| Precision | 55.3% |
+| Recall | 44.7% |
+| F1-score | 49.4% |
+| ROC-AUC | 0.799 |
+
+*Note: These results are provisional because the test dataset was examined during earlier experiments. The model is a learning project and should not be used for employment decisions without further validation.*
+
+### Technologies Used
+
+- Python
+- Pandas
+- Scikit-learn
+- Matplotlib
+- Joblib
+- Git and GitHub

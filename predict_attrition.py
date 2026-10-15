@@ -2,7 +2,9 @@ import pandas as pd
 import joblib
 
 MODEL_PATH = "models/attrition_model.joblib"
-THRESHOLD = 0.4
+from pathlib import Path
+
+THRESHOLD = float(Path("reports/selected_threshold.txt").read_text().strip())
 
 model = joblib.load(MODEL_PATH)
 
