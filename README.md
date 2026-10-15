@@ -165,3 +165,27 @@ This project uses a public educational dataset. Its predictions are not validate
 - Seaborn — statistical visualization
 - Joblib — model saving and loading
 - Git and GitHub — version control and project hosting
+
+
+
+## Automated Testing and Validation
+
+The project includes automated tests using pytest.
+
+### Test coverage
+- Dataset validation: missing values, duplicate rows, target labels, and feature exclusions.
+- Model loading and classification threshold validation.
+- Prediction probability and output validation.
+- Holdout split integrity and evaluation metric checks.
+
+### Run the tests
+
+```bash
+python -m pytest -v
+```
+
+### Latest test results
+- Tests passed: 15
+- Tests failed: 0
+
+These tests verify core project behavior and data assumptions. They do not guarantee performance on new real-world data. The model requires further external validation before any operational use.
