@@ -1,55 +1,70 @@
-# Baseline Model Evaluation
 
-## Dataset
-- Rows: 1,470
-- Features: 35
+# Employee Attrition — Model Evaluation
+
+## 1. Dataset
+- Total records: 1,470
+- Original columns: 35
 - Employees who left: 16.12%
-- Target: Attrition
+- Target: Attrition (No = 0, Yes = 1)
 
-## Model Comparison
+The target is imbalanced, so accuracy is not sufficient on its own.
+
+## 2. Baseline Model Comparison
+
+The following models were evaluated using the same baseline train/test split.
 
 | Model | Accuracy | Precision | Recall | F1-score | ROC-AUC |
 |---|---:|---:|---:|---:|---:|
-| Logistic Regression | 0.861 | 0.615 | 0.340 | 0.438 | 0.811 |
-| Random Forest | 0.833 | 0.476 | 0.426 | 0.449 | 0.782 |
+| Logistic Regression | 0.861 | 0.615 | 0.340 | 0.438 | 0.812 |
+| Random Forest | 0.827 | 0.452 | 0.404 | 0.427 | 0.791 |
 
-## Initial Findings
-- Logistic Regression has higher accuracy, precision, and ROC-AUC.
-- Random Forest has higher recall and F1-score.
-- Attrition detection needs improvement because both models miss many employees who actually leave.
-- Accuracy alone is insufficient because the target classes are imbalanced.
+Logistic Regression had higher accuracy, precision, F1-score, and ROC-AUC in this comparison. Random Forest had higher recall.
 
-## Next Step
-Investigate classification thresholds and improve recall while monitoring precision and F1-score.
+These are baseline comparison results, not the final holdout evaluation.
 
-## Classification Threshold Experiment
+## 3. Threshold Selection
+
+Candidate classification thresholds were evaluated on validation data. The threshold with the highest validation F1-score was selected.
 
 | Threshold | Precision | Recall | F1-score |
 |---:|---:|---:|---:|
-| 0.3 | 0.500 | 0.511 | 0.505 |
-| 0.4 | 0.618 | 0.447 | 0.519 |
-| 0.5 | 0.615 | 0.340 | 0.438 |
-| 0.6 | 0.700 | 0.298 | 0.418 |
+| 0.20 | 0.420 | 0.763 | 0.542 |
+| 0.30 | 0.519 | 0.711 | 0.600 |
+| 0.40 | 0.675 | 0.711 | 0.692 |
+| 0.50 | 0.885 | 0.605 | 0.719 |
+| 0.60 | 0.950 | 0.500 | 0.655 |
 
-### Findings
-- Threshold 0.4 achieved the highest F1-score among the tested thresholds.
-- Threshold 0.3 achieved the highest recall.
-- Threshold 0.6 achieved the highest precision.
-- The threshold should be selected according to the business objective.
-- Threshold 0.4 is provisional and requires further validation.
+Selected threshold: **0.50**
 
-## Final Evaluation at Threshold 0.4
+The threshold was selected using validation data, not the final holdout set.
+
+## 4. Final Holdout Evaluation
+
+The final evaluation used a holdout set of 294 records.
 
 | Metric | Score |
 |---|---:|
-| Accuracy | 86.73% |
-| Precision | 61.76% |
-| Recall | 44.68% |
-| F1-score | 51.85% |
-| ROC-AUC | 81.14% |
+| Threshold | 0.50 |
+| Accuracy | 85.37% |
+| Precision | 56.67% |
+| Recall | 36.17% |
+| F1-score | 44.16% |
+| ROC-AUC | 82.01% |
 
-### Interpretation
-- The model achieves 86.73% accuracy on the held-out test set.
-- Recall of 44.68% means the model detects fewer than half of actual attrition cases.
-- The threshold of 0.4 improves recall and F1-score compared with the default threshold of 0.5.
-- These results are educational benchmarks, not evidence of readiness for real HR decisions.
+### Confusion Matrix
+
+Rows represent actual outcomes; columns represent predicted outcomes.
+
+| | Predicted Stayed | Predicted Left |
+|---|---:|---:|
+| Actual Stayed | 234 | 13 |
+| Actual Left | 30 | 17 |
+
+The model detected 17 of the 47 employees who left in the holdout set and missed 30.
+
+## 5. Interpretation and Limitations
+- Accuracy should be interpreted alongside recall, precision, F1-score, and ROC-AUC because the target is imbalanced.
+- The model's recall for attrition is limited and requires improvement.
+- The results are estimates from a single holdout split, not independent external validation.
+- Threshold choice depends on the relative costs of missed attrition cases and false alarms.
+- Predictions are not proof that an employee will leave and should not be used as the sole basis for employment decisions.

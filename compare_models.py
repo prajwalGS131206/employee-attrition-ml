@@ -2,6 +2,7 @@
 from pathlib import Path
 
 import pandas as pd
+
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
@@ -17,29 +18,59 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-# Load dataset
+
+# 1. Load dataset
 csv_files = list(Path("data").glob("*.csv"))
+
 if not csv_files:
     raise FileNotFoundError("No CSV found in data/")
 
 df = pd.read_csv(csv_files[0])
-X = df.drop(columns=["Attrition", "EmployeeNumber"], errors="ignore")
+
+if "Attrition" not in df.columns:
+    raise ValueError("Attrition column is missing.")
+
+# Remove target, employee ID, and constant columns
+X = df.drop(
+    columns=[
+        "Attrition",
+        "EmployeeNumber",
+        "EmployeeCount",
+        "Over18",
+        "StandardHours",
+    ],
+    errors="ignore",
+)
+
 y = df["Attrition"].map({"No": 0, "Yes": 1})
 
 if y.isna().any():
     raise ValueError("Unexpected values in Attrition column.")
 
-# Split once so both models use the same test records
+print(f"Dataset rows: {len(df)}")
+print(f"Features used: {X.shape[1]}")
+
+
+# 2. Use the same split for both models
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y,
-    test_size=0.2,
+    X,
+    y,
+    test_size=0.20,
     random_state=42,
     stratify=y,
 )
 
-numeric_cols = X.select_dtypes(include="number").columns.tolist()
-categorical_cols = X.select_dtypes(exclude="number").columns.tolist()
+# 3. Identify feature types from training data
+numeric_cols = X_train.select_dtypes(
+    include="number"
+).columns.tolist()
 
+categorical_cols = X_train.select_dtypes(
+    exclude="number"
+).columns.tolist()
+
+
+# 4. Build a complete preprocessing and modeling pipeline
 def make_pipeline(classifier):
     preprocessing = ColumnTransformer([
         ("numeric", Pipeline([
@@ -53,10 +84,12 @@ def make_pipeline(classifier):
     ])
 
     return Pipeline([
-        ("preprocessing", preprocessing),
+        ("preprocessor", preprocessing),
         ("classifier", classifier),
     ])
 
+
+# 5. Define models
 models = {
     "Logistic Regression": LogisticRegression(max_iter=2000),
     "Random Forest": RandomForestClassifier(
@@ -67,10 +100,11 @@ models = {
     ),
 }
 
+# 6. Train and evaluate both models
 results = []
 
-for name, model in models.items():
-    pipeline = make_pipeline(model)
+for name, classifier in models.items():
+    pipeline = make_pipeline(classifier)
     pipeline.fit(X_train, y_train)
 
     predictions = pipeline.predict(X_test)
@@ -79,17 +113,27 @@ for name, model in models.items():
     results.append({
         "Model": name,
         "Accuracy": accuracy_score(y_test, predictions),
-        "Precision": precision_score(y_test, predictions, zero_division=0),
-        "Recall": recall_score(y_test, predictions, zero_division=0),
-        "F1-score": f1_score(y_test, predictions, zero_division=0),
+        "Precision": precision_score(
+            y_test, predictions, zero_division=0
+        ),
+        "Recall": recall_score(
+            y_test, predictions, zero_division=0
+        ),
+        "F1-score": f1_score(
+            y_test, predictions, zero_division=0
+        ),
         "ROC-AUC": roc_auc_score(y_test, probabilities),
     })
 
 results_df = pd.DataFrame(results).set_index("Model").round(3)
 
-print("\n--- MODEL COMPARISON ---")
-print(results_df)
+print("\n--- BASELINE MODEL COMPARISON ---")
+print(results_df.to_string())
 
+# 7. Save results
 Path("reports").mkdir(exist_ok=True)
+
 results_df.to_csv("reports/model_comparison.csv")
+
 print("\nSaved comparison to reports/model_comparison.csv")
+print("Note: This is a separate baseline split, not the final holdout evaluation.")

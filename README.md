@@ -13,13 +13,17 @@ The project combines Python, machine learning, exploratory data analysis, and Po
 - Interpret the factors associated with attrition.
 - Develop an interactive HR analytics dashboard in Power BI.
 
-## Tech Stack
+
+### Tech stack
+
 - Python
-- Pandas and NumPy
-- Matplotlib and Seaborn
+- Pandas
 - Scikit-learn
-- Power BI
+- Matplotlib
+- Joblib
 - Git and GitHub
+
+
 
 ## Dataset
 We plan to use the IBM HR Analytics Employee Attrition dataset.
@@ -150,11 +154,14 @@ This project uses a public educational dataset. Its predictions are not validate
 
 *Note: These results are provisional because the test dataset was examined during earlier experiments. The model is a learning project and should not be used for employment decisions without further validation.*
 
+
 ### Technologies Used
 
 - Python
-- Pandas
-- Scikit-learn
-- Matplotlib
-- Joblib
-- Git and GitHub
+- Pandas — data handling and analysis
+- NumPy — numerical computations
+- Scikit-learn — preprocessing, machine learning, and evaluation
+- Matplotlib — data visualization
+- Seaborn — statistical visualization
+- Joblib — model saving and loading
+- Git and GitHub — version control and project hosting
